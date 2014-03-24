@@ -9,14 +9,18 @@
 Syntax validation to eliminate suspicious code and violations of code style.
 
 ***
+
+![crock](crock.png)
+
+***
 # Suspicious code (bugs potentially)
 
 Undefined variables
 
-```js
-    function bad() {
-        return foo;
-    }
+```javascript
+function bad() {
+    return foo;
+}
 ```
 
 ***
@@ -24,7 +28,7 @@ Undefined variables
 
 Lack of brackets
 
-```js
+```javascript
 if (someVal)
     someVal += otherVal;
     someVal++;
@@ -36,7 +40,7 @@ if (someVal)
 
 Invalid
 
-```js
+```javascript
 function BAD_func (b , c){ 
       var a = 3333
     return a;
@@ -45,7 +49,7 @@ function BAD_func (b , c){
 
 Valid
 
-```js
+```javascript
 function goodFunc(b, c) { 
     var a = 3333;
     return a;
@@ -56,14 +60,13 @@ function goodFunc(b, c) {
 # [JSLint]
 
 - &copy; Douglas Crockford, 2002
-- too strong rules, enforcing "The Good Parts"
+- enforcing "The Good Parts"
 
 ****
 # [JSHint]
 
 - &copy; Anton Kovalyov, 2010
-- more configurable
-- support ES6
+- more configurable, less strict by default
 
 ****
 # How to use 
@@ -95,7 +98,7 @@ function goodFunc(b, c) {
 ***
 # Configuration per file
 
-```
+```javascript
 /*globals foo: false, baz: false */
 /*jshint camelcase: false */
 
@@ -113,74 +116,250 @@ function goodFunc(b, c) {
 - line and position of error, description
 - different formats (human readable, JSON, XML, etc.)
 
+```javascript
+var foo = function() {
+    return a;
+};
 ```
-demo.js: line 2, col 14, 'main' is defined but never used.
-demo.js: line 2, col 19, 'b' is defined but never used.
+
+```
+jshint example.js
+```
+
+```
+example1.js: line 2, col 5, Missing "use strict" statement.
+example1.js: line 2, col 12, 'a' is not defined.
+example1.js: line 1, col 8, 'foo' is defined but never used.
+
+3 errors
 ```
 
 ***
 # Favorite rules
+****
 
-add picture Crockford + bootstrap
+## `undef` Require all non-global variables to be declared (prevents global leaks)
 
-- `undef` Require all non-global variables to be declared (prevents global leaks)
-- `unused` Require all defined variables be used
+Not valid
+```javascript
+function bad() {
+    return foo;
+}
+```
 
-***
-# `asi` Require semicolons
-
-***
-- `curly` Require {} for every new block or scope
-- `newcap` Require capitalization of all constructor functions e.g. `new F()`
-- `indent` Spaces to indent
-- `camelcase` 
-- `quotmark`
-
-***
-
-# Below the trunk
-
-- tokenize
-
-JSHint 3.0 promise more modular, own rules, ...
-
-***
-
-# Enter Esprima
-
-***
-
-# ESLint
-
-- working with AST 
-- more sofisticated rules
-- each rule in separate file
-- can write own rules
-- 99% rules of JSHint
-- two level of invalidation -- warning and error
-
-***
-
-# Same configuration 
-
-- `.eslintrc` (JSON or YAML)
-- `/*eslint */` 
-
-***
-
-# Favorite rules
-
-- `no-dupe-keys`
-- `no-floating-decimal`
-- `block-scoped-vars`
-- `consistent-this` "consistent-this": [2, "self"],
-- `func-style`
-- `radix`
-- `semi` can enforce absent of semi
-- convert !!!!
+Valid
+```javascript
+function good() {
+    var foo;
+    return foo;
+}
+```
 
 ****
 
+## `unused` Require all defined variables be used
+Not valid
+```javascript
+function bad(baz) {
+    var foo = 5;
+    return foo;
+}
+```
+
+Valid
+```javascript
+function good() {
+    var foo = 5;
+    return foo;
+}
+```
+***
+## `asi` Require semicolons
+Not valid
+```javascript
+function bad(baz) {
+    var foo = 5
+    return foo
+}
+```
+
+Valid
+```javascript
+function good() {
+    var foo = 5;
+    return foo;
+}
+```
+***
+# `curly` Require {} for every new block or scope
+```javascript
+function bad(baz) {
+    if (baz > 5)
+        return baz;
+    return 10;
+}
+```
+
+Valid
+```javascript
+function good() {
+    if (baz > 5) {
+        return baz;
+    }
+    return 10;
+}
+```
+***
+## `newcap` Require capitalization of all constructor functions, `camelcase` Identifiers must be in camelCase
+Not valid
+```javascript
+var my_bar = new bar();
+```
+
+Valid
+```javascript
+var myBar = new Bar();
+```
+****
+# `indent` Spaces to indent, `quotmark` Quotation mark
+Not valid
+```javascript
+function bad(){
+return 'foo' + "bar";
+}
+```
+
+Valid
+```javascript
+function bad(){
+    return 'foo' + 'bar';
+}
+```
+
+***
+# Below the trunk
+
+- tokenize JavaScript
+
+***
+# JSHint 3.0
+- more modular 
+- user rules
+- get rid of code style checking
+
+***
+# Enter [Esprima]
+
+***
+# [ESLint]
+
+- working with AST 
+- more sofisticated and complex rules
+- more robust alarm levels
+- 99% rules of [JSHint]
+- each rule in separate file
+- environments with globals and rules
+- user can write own rules
+- user can set notification level of rule -- ignore, warning or erro
+
+***
+# Same configuration as [JSHint]
+
+- `.eslintrc` (JSON or YAML)
+- `/*eslint ... */` 
+
+***
+# Favorite rules
+
+****
+# `func-style` Enforce function style
+```
+"func-style": [2, "expression"]
+```
+Not valid
+```javascript
+function foo(){};
+```
+
+Valid
+```javascript
+var foo = function(){};
+```
+***
+# `no-dupe-keys` Disallow duplicate keys
+Not valid
+```javascript
+var foo = {
+    bar: "baz",
+    bar: "qux"
+};
+```
+
+Valid
+```javascript
+var foo = {
+    bar: "baz"
+};
+```
+****
+# `block-scoped-vars` Threat var as block scoped
+
+Not valid
+```javascript
+function doSomething(a) {
+    if (a) {
+        var build = true;
+    }
+
+    console.log(build);
+}
+```
+
+Valid 
+```javascript
+function doSomething(a) {
+    var build;
+    if (a) {
+        build = true;
+    }
+
+    console.log(build);
+}
+```
+****
+# `consistent-this` Require consistent `this`
+```
+"consistent-this": [2, "self"]
+```
+
+Not valid
+```javascript
+var that = this;
+```
+
+Valid
+```javascript
+var self = this;
+```
+****
+# `radix` require radix for `parseInt`
+
+Not valid
+```javascript
+var a = parseInt("055");
+```
+
+Valid
+```javascript
+var a = parseInt("055", 10);
+```
+****
+# `semi` can enforce absent of semi
+```
+semi: [2, "never"]
+```
+
+****
 # Drawbacks
 
 - still in-dev
@@ -189,11 +368,73 @@ JSHint 3.0 promise more modular, own rules, ...
 
 ****
 
-# JSCS
+# [JSCS]
 
 - JavaScript Code Style checker
 - based on Esprima
-- rules can be appied to any keyword
+
+****
+# Favorite rules
+
+****
+# `disallowImplicitTypeConversion`
+```javascript
+var a = !!someVar;
+var b = +someInt;
+var c = '' + someStr;
+```
+
+Valid
+```javascript
+var a = Boolean(someVar);
+var b = Integer(someInt);
+var c = String(someStr);
+```
+****
+# `requireCurlyBraces` Requires curly braces after statements
+
+```json 
+{
+"requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+]
+}
+```
+****
+# `requireSpaceAfterKeywords`, `disallowSpaceAfterKeywords`
+
+```json
+{
+    "requireSpaceAfterKeywords": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "switch",
+        "return",
+        "try",
+        "catch",
+        "case"
+    ],
+    "disallowSpaceAfterKeywords": [
+        "default"
+    ]
+}
+```
+# All code style
+
+- `validateLineBreaks` 
+- `validateQuoteMarks` 
+- `validateIndentation` 
+- `disallowMixedSpacesAndTabs` 
+- `disallowTrailingWhitespace`
 
 ****
 
@@ -207,8 +448,9 @@ JSHint 3.0 promise more modular, own rules, ...
 
 # Sublime Text
 
-- SublimeLinter
-- screenshot
+- [SublimeLinter]
+
+![](sublimelinter.png)
 
 ****
 
@@ -216,19 +458,10 @@ JSHint 3.0 promise more modular, own rules, ...
 
 ****
 
-# Deploy process
+# CI
 
 - before/after testing
-- gulp, grunt, ...
-
-****
-
-# Favorite rules
-
-- `requireCurlyBraces`
-- `requireSpaceAfterKeywords`
-- `validateLineBreaks`
-- `validateJSDoc`
+- gulp, Grunt, ...
 
 ****
 
@@ -236,11 +469,13 @@ JSHint 3.0 promise more modular, own rules, ...
 
 ****
 
-# EditorConfig
+# [EditorConfig]
 
 - simple format
-- plugins for almost all IDE
 - claims to become a standard
+- file `.editorconfig` for project and plugins for almost all IDEs
+
+!["Editor"](editorconfig.png)
 
 ****
 
@@ -267,39 +502,122 @@ trim_trailing_whitespace = false
 
 ****
 
-# JS Beautifier
+# [JS Beautifier]
 
+- whitespaces and newlines
 - based on tokens
 - stable, in general
-- not very configurated :(
+- not very configurable :(
 
 ****
 
 # Favorite rules
 
-- "indent_size": <%= opts.indentSize %>,
-- "indent_char": " ",
-- "preserve_newlines": true,
-- "max_preserve_newlines": 2,
-- "brace_style": "collapse",
-- "keep_array_indentation": false,
-- "keep_function_indentation": false,
-- "space_before_conditional": true,
-- "space_in_paren": false,
+```json
+{    
+    "indent_size": 4,
+    "indent_char": " ",
+    "indent_level": 0,
+
+    "preserve_newlines": true,
+    "max_preserve_newlines": 2,
+
+    "jslint_happy": false,
+    "brace_style": "collapse",
+
+    "keep_array_indentation": false,
+    "keep_function_indentation": false,
+
+    "space_before_conditional": true,
+    "space_in_paren": false,
+}
+```
+****
+# Example
+
+Before
+```javascript
+var a   = 33;
+var obj = { a :  33,
+    b: "bzzz"
+    };
+if(a>3){console.log( a);}
+```
+
+After
+```javascript
+var a = 33;
+var obj = {
+    a: 33,
+    b: "bzzz"
+};
+if (a > 3) {
+    console.log(a);
+}
+```
 
 ****
 
 # ESFormatter
 
+- whitespaces and newlines (planning semicolons)
 - based on Esprima
-- seems configurated
-- unstable :(
+- seems configurable
+- early and unstable :(
 
 ****
 
 # Rules
 
-try animation
+```json
+{
+    "lineBreak": {
+        "before": {
+            "AssignmentExpression": 1,
+            "BlockStatement": 0
+            // ....
+        },
+        "after": {
+            "AssignmentExpression": 1,
+            "BlockStatement": 1
+            // ....
+        }
+    },
+    "whitespace": {
+        "before": {
+            "ArrayExpressionOpening": 0,
+            "ArrayExpressionClosing": 0,
+            // ...
+        },
+        "after": {
+            "ArrayExpressionOpening": 2,
+            "ArrayExpressionClosing": 0,
+            // ...
+        }
+    }
+}
+```
+
+****
+# Example
+
+Before
+```javascript
+Q
+    .when(doSomething())
+    .then(function() {
+        return 333;
+    });
+```
+
+After
+```javascript
+Q
+    .when(doSomething())
+    .then(function() {
+    return 333;
+});
+```
 
 ****
 
@@ -307,21 +625,10 @@ try animation
 
 ****
 
-# Editors
-
-****
-
-# Sublime Text
-
-* JsFormat JS Beautifier
-* EsFormatter for ESFormatter
-
-****
-
 # Integration
 
-- same as linter
-- better diff than replace
+- same as linting
+- but better diff than replace
 
 ****
 
@@ -329,7 +636,7 @@ try animation
 
 ****
 
-# 1. Install EditorConfig
+# 1. Install [EditorConfig]
 
 ****
 
@@ -350,7 +657,7 @@ try animation
 ****
 
 ```
-$ npm install generator-linters -g
+$ npm install -g generator-linters
 ```
 
 ****
@@ -358,3 +665,7 @@ $ npm install generator-linters -g
 
 [JSLint]: http://jslint.com/  "JSLint"
 [JSHint]: http://jshint.org/  "JSHint"
+[ESLint]: http://eslint.org/  "ESLint"
+[Esprima]: http://esprima.org/  "Esprima"
+[JSCS]: https://github.com/mdevils/node-jscs  "JSCS"
+[SublimeLinter]: http://sublimelinter.readthedocs.org "SublimeLinter"

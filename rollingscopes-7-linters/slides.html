@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!-- configuration parameters -->
+  <meta name="defaultView" content="slideshow" />
+  <meta name="controlVis" content="hidden" />
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <!-- style sheet links -->
+  <link rel="stylesheet" href="s5/default/slides.css" type="text/css" media="projection" id="slideProj" />
+  <link rel="stylesheet" href="s5/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+  <link rel="stylesheet" href="s5/default/print.css" type="text/css" media="print" id="slidePrint" />
+  <link rel="stylesheet" href="s5/default/opera.css" type="text/css" media="projection" id="operaFix" />
+  <!-- S5 JS -->
+  <script src="s5/default/slides.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer">
+  <h1></h1>
+  <h2></h2>
+</div>
+</div>
+<div class="presentation">
+<div class="slide section level1">
+
+<!-- background: #184bc6 -->
+<!-- color: #fff -->
+
+</div>
+<div id="javascript-linters" class="slide section level1">
+<h1>JavaScript Linters</h1>
+</div>
+<div class="slide section level1">
+
+<p>Syntax validation to eliminate suspicious code and violations of code style.</p>
+</div>
+<div id="suspicious-code-bugs-potentially" class="slide section level1">
+<h1>Suspicious code (bugs potentially)</h1>
+<p>Undefined variables</p>
+<pre class="js"><code>    function bad() {
+        return foo;
+    }</code></pre>
+</div>
+<div id="suspicious-code-bugs-potentially-1" class="slide section level1">
+<h1>Suspicious code (bugs potentially)</h1>
+<p>Lack of brackets</p>
+<pre class="js"><code>if (someVal)
+    someVal += otherVal;
+    someVal++;
+    return someVal;    </code></pre>
+</div>
+<div id="code-style" class="slide section level1">
+<h1>Code Style</h1>
+<p>Invalid</p>
+<pre class="js"><code>function BAD_func (b , c){ 
+      var a = 3333
+    return a;
+  }</code></pre>
+<p>Valid</p>
+<pre class="js"><code>function goodFunc(b, c) { 
+    var a = 3333;
+    return a;
+}</code></pre>
+</div>
+<div id="jslint" class="slide section level1">
+<h1><a href="http://jslint.com/" title="JSLint">JSLint</a></h1>
+<ul>
+<li>© Douglas Crockford, 2002</li>
+<li>too strong rules, enforcing &quot;The Good Parts&quot;</li>
+</ul>
+</div>
+<div id="jshint" class="slide section level1">
+<h1><a href="http://jshint.org/" title="JSHint">JSHint</a></h1>
+<ul>
+<li>© Anton Kovalyov, 2010</li>
+<li>more configurable</li>
+<li>support ES6</li>
+</ul>
+</div>
+<div id="how-to-use" class="slide section level1">
+<h1>How to use</h1>
+<ul>
+<li>CLI application <code>jshint file.js</code></li>
+<li>config file <code>.jshintrc</code>, JSON with comments</li>
+</ul>
+</div>
+<div id="jshintrc" class="slide section level1">
+<h1>.jshintrc</h1>
+<ul>
+<li>rules</li>
+<li>environments (browser, node, etc.)</li>
+<li>globals</li>
+</ul>
+<pre class="sourceCode json"><code class="sourceCode json">{
+    <span class="dt">&quot;bitwise&quot;</span>       : <span class="dv">true</span>,
+    <span class="dt">&quot;camelcase&quot;</span>     : <span class="dv">true</span>, 
+
+    <span class="dt">&quot;node&quot;</span>: <span class="dv">true</span>,
+
+    <span class="dt">&quot;globals&quot;</span>: {
+        <span class="dt">&quot;foo&quot;</span>: <span class="dv">true</span>,
+        <span class="dt">&quot;bar&quot;</span>: <span class="dv">false</span> <span class="er">//</span> <span class="er">readonly</span>
+    }
+}</code></pre>
+</div>
+<div id="configuration-per-file" class="slide section level1">
+<h1>Configuration per file</h1>
+<pre><code>/*globals foo: false, baz: false */
+/*jshint camelcase: false */
+
+// ....
+
+/* jshint ignore:start */
+// ...
+/* jshint ignore:end */</code></pre>
+</div>
+<div id="output" class="slide section level1">
+<h1>Output</h1>
+<ul>
+<li>list of errors</li>
+<li>line and position of error, description</li>
+<li>different formats (human readable, JSON, XML, etc.)</li>
+</ul>
+<pre><code>demo.js: line 2, col 14, &#39;main&#39; is defined but never used.
+demo.js: line 2, col 19, &#39;b&#39; is defined but never used.</code></pre>
+</div>
+<div id="favorite-rules" class="slide section level1">
+<h1>Favorite rules</h1>
+<p>add picture Crockford + bootstrap</p>
+<ul>
+<li><code>undef</code> Require all non-global variables to be declared (prevents global leaks)</li>
+<li><code>unused</code> Require all defined variables be used</li>
+</ul>
+</div>
+<div id="asi-require-semicolons" class="slide section level1">
+<h1><code>asi</code> Require semicolons</h1>
+</div>
+<div class="slide section level1">
+
+<ul>
+<li><code>curly</code> Require {} for every new block or scope</li>
+<li><code>newcap</code> Require capitalization of all constructor functions e.g. <code>new F()</code></li>
+<li><code>indent</code> Spaces to indent</li>
+<li><code>camelcase</code></li>
+<li><code>quotmark</code></li>
+</ul>
+</div>
+<div id="below-the-trunk" class="slide section level1">
+<h1>Below the trunk</h1>
+<ul>
+<li>tokenize</li>
+</ul>
+<p>JSHint 3.0 promise more modular, own rules, ...</p>
+</div>
+<div id="enter-esprima" class="slide section level1">
+<h1>Enter Esprima</h1>
+</div>
+<div id="eslint" class="slide section level1">
+<h1>ESLint</h1>
+<ul>
+<li>working with AST</li>
+<li>more sofisticated rules</li>
+<li>each rule in separate file</li>
+<li>can write own rules</li>
+<li>99% rules of JSHint</li>
+<li>two level of invalidation -- warning and error</li>
+</ul>
+</div>
+<div id="same-configuration" class="slide section level1">
+<h1>Same configuration</h1>
+<ul>
+<li><code>.eslintrc</code> (JSON or YAML)</li>
+<li><code>/*eslint */</code></li>
+</ul>
+</div>
+<div id="favorite-rules-1" class="slide section level1">
+<h1>Favorite rules</h1>
+<ul>
+<li><code>no-dupe-keys</code></li>
+<li><code>no-floating-decimal</code></li>
+<li><code>block-scoped-vars</code></li>
+<li><code>consistent-this</code> &quot;consistent-this&quot;: [2, &quot;self&quot;],</li>
+<li><code>func-style</code></li>
+<li><code>radix</code></li>
+<li><code>semi</code> can enforce absent of semi</li>
+<li>convert !!!!</li>
+</ul>
+</div>
+<div id="drawbacks" class="slide section level1">
+<h1>Drawbacks</h1>
+<ul>
+<li>still in-dev</li>
+<li>does not support ES6+ (will be 0.5.0)</li>
+<li>a bit slow (5x JSHint)</li>
+</ul>
+</div>
+<div id="jscs" class="slide section level1">
+<h1>JSCS</h1>
+<ul>
+<li>JavaScript Code Style checker</li>
+<li>based on Esprima</li>
+<li>rules can be appied to any keyword</li>
+</ul>
+</div>
+<div id="integration-when-cli-is-not-enough" class="slide section level1">
+<h1>Integration (when CLI is not enough)</h1>
+</div>
+<div id="editors" class="slide section level1">
+<h1>Editors</h1>
+</div>
+<div id="sublime-text" class="slide section level1">
+<h1>Sublime Text</h1>
+<ul>
+<li>SublimeLinter</li>
+<li>screenshot</li>
+</ul>
+</div>
+<div id="and-all-other-editors" class="slide section level1">
+<h1>...and all other editors</h1>
+</div>
+<div id="deploy-process" class="slide section level1">
+<h1>Deploy process</h1>
+<ul>
+<li>before/after testing</li>
+<li>gulp, grunt, ...</li>
+</ul>
+</div>
+<div id="favorite-rules-2" class="slide section level1">
+<h1>Favorite rules</h1>
+<ul>
+<li><code>requireCurlyBraces</code></li>
+<li><code>requireSpaceAfterKeywords</code></li>
+<li><code>validateLineBreaks</code></li>
+<li><code>validateJSDoc</code></li>
+</ul>
+</div>
+<div id="computer-fix-my-code" class="slide section level1">
+<h1>Computer, fix my code</h1>
+</div>
+<div id="editorconfig" class="slide section level1">
+<h1>EditorConfig</h1>
+<ul>
+<li>simple format</li>
+<li>plugins for almost all IDE</li>
+<li>claims to become a standard</li>
+</ul>
+</div>
+<div id="favorite-options" class="slide section level1">
+<h1>Favorite options</h1>
+<pre><code>root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{md,jade}]
+trim_trailing_whitespace = false</code></pre>
+</div>
+<div id="javascript-formatters" class="slide section level1">
+<h1>JavaScript Formatters</h1>
+</div>
+<div id="js-beautifier" class="slide section level1">
+<h1>JS Beautifier</h1>
+<ul>
+<li>based on tokens</li>
+<li>stable, in general</li>
+<li>not very configurated :(</li>
+</ul>
+</div>
+<div id="favorite-rules-3" class="slide section level1">
+<h1>Favorite rules</h1>
+<ul>
+<li>&quot;indent_size&quot;: &lt;%= opts.indentSize %&gt;,</li>
+<li>&quot;indent_char&quot;: &quot; &quot;,</li>
+<li>&quot;preserve_newlines&quot;: true,</li>
+<li>&quot;max_preserve_newlines&quot;: 2,</li>
+<li>&quot;brace_style&quot;: &quot;collapse&quot;,</li>
+<li>&quot;keep_array_indentation&quot;: false,</li>
+<li>&quot;keep_function_indentation&quot;: false,</li>
+<li>&quot;space_before_conditional&quot;: true,</li>
+<li>&quot;space_in_paren&quot;: false,</li>
+</ul>
+</div>
+<div id="esformatter" class="slide section level1">
+<h1>ESFormatter</h1>
+<ul>
+<li>based on Esprima</li>
+<li>seems configurated</li>
+<li>unstable :(</li>
+</ul>
+</div>
+<div id="rules" class="slide section level1">
+<h1>Rules</h1>
+<p>try animation</p>
+</div>
+<div id="integration" class="slide section level1">
+<h1>Integration</h1>
+</div>
+<div id="editors-1" class="slide section level1">
+<h1>Editors</h1>
+</div>
+<div id="sublime-text-1" class="slide section level1">
+<h1>Sublime Text</h1>
+<ul>
+<li>JsFormat JS Beautifier</li>
+<li>EsFormatter for ESFormatter</li>
+</ul>
+</div>
+<div id="integration-1" class="slide section level1">
+<h1>Integration</h1>
+<ul>
+<li>same as linter</li>
+<li>better diff than replace</li>
+</ul>
+</div>
+<div id="plan-to-follow" class="slide section level1">
+<h1>Plan to follow</h1>
+</div>
+<div id="install-editorconfig" class="slide section level1">
+<h1>1. Install EditorConfig</h1>
+</div>
+<div id="install-your-favorite-linters-and-add-them-to-your-favorite-editor" class="slide section level1">
+<h1>2. Install your favorite linters and add them to your favorite editor</h1>
+</div>
+<div id="try-to-lint-your-existing-code" class="slide section level1">
+<h1>3. Try to lint your existing code</h1>
+</div>
+<div id="play-with-settings" class="slide section level1">
+<h1>4. Play with settings</h1>
+</div>
+<div id="try-to-install-and-configure-formatters" class="slide section level1">
+<h1>5. Try to install and configure formatters</h1>
+</div>
+<div class="slide section level1">
+
+<pre><code>$ npm install generator-linters -g</code></pre>
+</div>
+<div id="thank-you" class="slide section level1">
+<h1>Thank you!</h1>
+</div>
+</div>
+</body>
+</html>

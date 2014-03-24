@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide section level1">
+
+<!-- background: #184bc6 -->
+<!-- color: #fff -->
+
+</div>
+<div id="javascript-linters" class="slide section level1">
+<h1>JavaScript Linters</h1>
+</div>
+<div class="slide section level1">
+
+<p>Syntax validation to eliminate suspicious code and violations of code style.</p>
+</div>
+<div class="slide section level1">
+
+<div class="figure">
+<img src="crock.png" alt="crock" /><p class="caption">crock</p>
+</div>
+</div>
+<div id="suspicious-code-bugs-potentially" class="slide section level1">
+<h1>Suspicious code (bugs potentially)</h1>
+<p>Undefined variables</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>() {
+    <span class="kw">return</span> foo;
+}</code></pre>
+</div>
+<div id="suspicious-code-bugs-potentially-1" class="slide section level1">
+<h1>Suspicious code (bugs potentially)</h1>
+<p>Lack of brackets</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">if</span> (someVal)
+    someVal += otherVal;
+    someVal++;
+    <span class="kw">return</span> someVal;    </code></pre>
+</div>
+<div id="code-style" class="slide section level1">
+<h1>Code Style</h1>
+<p>Invalid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">BAD_func</span> (b , c){ 
+      <span class="kw">var</span> a = <span class="dv">3333</span>
+    <span class="kw">return</span> a;
+  }</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">goodFunc</span>(b, c) { 
+    <span class="kw">var</span> a = <span class="dv">3333</span>;
+    <span class="kw">return</span> a;
+}</code></pre>
+</div>
+<div id="jslint" class="slide section level1">
+<h1><a href="http://jslint.com/" title="JSLint">JSLint</a></h1>
+<ul>
+<li>© Douglas Crockford, 2002</li>
+<li>enforcing &quot;The Good Parts&quot;</li>
+</ul>
+</div>
+<div id="jshint" class="slide section level1">
+<h1><a href="http://jshint.org/" title="JSHint">JSHint</a></h1>
+<ul>
+<li>© Anton Kovalyov, 2010</li>
+<li>more configurable, less strict by default</li>
+</ul>
+</div>
+<div id="how-to-use" class="slide section level1">
+<h1>How to use</h1>
+<ul>
+<li>CLI application <code>jshint file.js</code></li>
+<li>config file <code>.jshintrc</code>, JSON with comments</li>
+</ul>
+</div>
+<div id="jshintrc" class="slide section level1">
+<h1>.jshintrc</h1>
+<ul>
+<li>rules</li>
+<li>environments (browser, node, etc.)</li>
+<li>globals</li>
+</ul>
+<pre class="sourceCode json"><code class="sourceCode json">{
+    <span class="dt">&quot;bitwise&quot;</span>       : <span class="dv">true</span>,
+    <span class="dt">&quot;camelcase&quot;</span>     : <span class="dv">true</span>, 
+
+    <span class="dt">&quot;node&quot;</span>: <span class="dv">true</span>,
+
+    <span class="dt">&quot;globals&quot;</span>: {
+        <span class="dt">&quot;foo&quot;</span>: <span class="dv">true</span>,
+        <span class="dt">&quot;bar&quot;</span>: <span class="dv">false</span> <span class="er">//</span> <span class="er">readonly</span>
+    }
+}</code></pre>
+</div>
+<div id="configuration-per-file" class="slide section level1">
+<h1>Configuration per file</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="co">/*globals foo: false, baz: false */</span>
+<span class="co">/*jshint camelcase: false */</span>
+
+<span class="co">// ....</span>
+
+<span class="co">/* jshint ignore:start */</span>
+<span class="co">// ...</span>
+<span class="co">/* jshint ignore:end */</span></code></pre>
+</div>
+<div id="output" class="slide section level1">
+<h1>Output</h1>
+<ul>
+<li>list of errors</li>
+<li>line and position of error, description</li>
+<li>different formats (human readable, JSON, XML, etc.)</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> foo = <span class="kw">function</span>() {
+    <span class="kw">return</span> a;
+};</code></pre>
+<pre><code>jshint example.js</code></pre>
+<pre><code>example1.js: line 2, col 5, Missing &quot;use strict&quot; statement.
+example1.js: line 2, col 12, &#39;a&#39; is not defined.
+example1.js: line 1, col 8, &#39;foo&#39; is defined but never used.
+
+3 errors</code></pre>
+</div>
+<div id="favorite-rules" class="slide section level1">
+<h1>Favorite rules</h1>
+</div>
+<div class="slide section level1">
+
+<h2 id="undef-require-all-non-global-variables-to-be-declared-prevents-global-leaks"><code>undef</code> Require all non-global variables to be declared (prevents global leaks)</h2>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>() {
+    <span class="kw">return</span> foo;
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">good</span>() {
+    <span class="kw">var</span> foo;
+    <span class="kw">return</span> foo;
+}</code></pre>
+</div>
+<div class="slide section level1">
+
+<h2 id="unused-require-all-defined-variables-be-used"><code>unused</code> Require all defined variables be used</h2>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>(baz) {
+    <span class="kw">var</span> foo = <span class="dv">5</span>;
+    <span class="kw">return</span> foo;
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">good</span>() {
+    <span class="kw">var</span> foo = <span class="dv">5</span>;
+    <span class="kw">return</span> foo;
+}</code></pre>
+</div>
+<div class="slide section level1">
+
+<h2 id="asi-require-semicolons"><code>asi</code> Require semicolons</h2>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>(baz) {
+    <span class="kw">var</span> foo = <span class="dv">5</span>
+    <span class="kw">return</span> foo
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">good</span>() {
+    <span class="kw">var</span> foo = <span class="dv">5</span>;
+    <span class="kw">return</span> foo;
+}</code></pre>
+</div>
+<div id="curly-require-for-every-new-block-or-scope" class="slide section level1">
+<h1><code>curly</code> Require {} for every new block or scope</h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>(baz) {
+    <span class="kw">if</span> (baz &gt; <span class="dv">5</span>)
+        <span class="kw">return</span> baz;
+    <span class="kw">return</span> <span class="dv">10</span>;
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">good</span>() {
+    <span class="kw">if</span> (baz &gt; <span class="dv">5</span>) {
+        <span class="kw">return</span> baz;
+    }
+    <span class="kw">return</span> <span class="dv">10</span>;
+}</code></pre>
+</div>
+<div class="slide section level1">
+
+<h2 id="newcap-require-capitalization-of-all-constructor-functions-camelcase-identifiers-must-be-in-camelcase"><code>newcap</code> Require capitalization of all constructor functions, <code>camelcase</code> Identifiers must be in camelCase</h2>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> my_bar = <span class="kw">new</span> <span class="fu">bar</span>();</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> myBar = <span class="kw">new</span> <span class="fu">Bar</span>();</code></pre>
+</div>
+<div id="indent-spaces-to-indent-quotmark-quotation-mark" class="slide section level1">
+<h1><code>indent</code> Spaces to indent, <code>quotmark</code> Quotation mark</h1>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>(){
+<span class="kw">return</span> <span class="st">&#39;foo&#39;</span> + <span class="st">&quot;bar&quot;</span>;
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">bad</span>(){
+    <span class="kw">return</span> <span class="st">&#39;foo&#39;</span> + <span class="st">&#39;bar&#39;</span>;
+}</code></pre>
+</div>
+<div id="below-the-trunk" class="slide section level1">
+<h1>Below the trunk</h1>
+<ul>
+<li>tokenize JavaScript</li>
+</ul>
+</div>
+<div id="jshint-3.0" class="slide section level1">
+<h1>JSHint 3.0</h1>
+<ul>
+<li>more modular</li>
+<li>user rules</li>
+<li>get rid of code style checking</li>
+</ul>
+</div>
+<div id="enter-esprima" class="slide section level1">
+<h1>Enter <a href="http://esprima.org/" title="Esprima">Esprima</a></h1>
+</div>
+<div id="eslint" class="slide section level1">
+<h1><a href="http://eslint.org/" title="ESLint">ESLint</a></h1>
+<ul>
+<li>working with AST</li>
+<li>more sofisticated and complex rules</li>
+<li>more robust alarm levels</li>
+<li>99% rules of <a href="http://jshint.org/" title="JSHint">JSHint</a></li>
+<li>each rule in separate file</li>
+<li>environments with globals and rules</li>
+<li>user can write own rules</li>
+<li>user can set notification level of rule -- ignore, warning or erro</li>
+</ul>
+</div>
+<div id="same-configuration-as-jshint" class="slide section level1">
+<h1>Same configuration as <a href="http://jshint.org/" title="JSHint">JSHint</a></h1>
+<ul>
+<li><code>.eslintrc</code> (JSON or YAML)</li>
+<li><code>/*eslint ... */</code></li>
+</ul>
+</div>
+<div id="favorite-rules-1" class="slide section level1">
+<h1>Favorite rules</h1>
+</div>
+<div id="func-style-enforce-function-style" class="slide section level1">
+<h1><code>func-style</code> Enforce function style</h1>
+<pre><code>&quot;func-style&quot;: [2, &quot;expression&quot;]</code></pre>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span>(){};</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> foo = <span class="kw">function</span>(){};</code></pre>
+</div>
+<div id="no-dupe-keys-disallow-duplicate-keys" class="slide section level1">
+<h1><code>no-dupe-keys</code> Disallow duplicate keys</h1>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> foo = {
+    <span class="dt">bar</span>: <span class="st">&quot;baz&quot;</span>,
+    <span class="dt">bar</span>: <span class="st">&quot;qux&quot;</span>
+};</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> foo = {
+    <span class="dt">bar</span>: <span class="st">&quot;baz&quot;</span>
+};</code></pre>
+</div>
+<div id="block-scoped-vars-threat-var-as-block-scoped" class="slide section level1">
+<h1><code>block-scoped-vars</code> Threat var as block scoped</h1>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">doSomething</span>(a) {
+    <span class="kw">if</span> (a) {
+        <span class="kw">var</span> build = <span class="kw">true</span>;
+    }
+
+    <span class="ot">console</span>.<span class="fu">log</span>(build);
+}</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">doSomething</span>(a) {
+    <span class="kw">var</span> build;
+    <span class="kw">if</span> (a) {
+        build = <span class="kw">true</span>;
+    }
+
+    <span class="ot">console</span>.<span class="fu">log</span>(build);
+}</code></pre>
+</div>
+<div id="consistent-this-require-consistent-this" class="slide section level1">
+<h1><code>consistent-this</code> Require consistent <code>this</code></h1>
+<pre><code>&quot;consistent-this&quot;: [2, &quot;self&quot;]</code></pre>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> that = <span class="kw">this</span>;</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> self = <span class="kw">this</span>;</code></pre>
+</div>
+<div id="radix-require-radix-for-parseint" class="slide section level1">
+<h1><code>radix</code> require radix for <code>parseInt</code></h1>
+<p>Not valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a = <span class="fu">parseInt</span>(<span class="st">&quot;055&quot;</span>);</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a = <span class="fu">parseInt</span>(<span class="st">&quot;055&quot;</span>, <span class="dv">10</span>);</code></pre>
+</div>
+<div id="semi-can-enforce-absent-of-semi" class="slide section level1">
+<h1><code>semi</code> can enforce absent of semi</h1>
+<pre><code>semi: [2, &quot;never&quot;]</code></pre>
+</div>
+<div id="drawbacks" class="slide section level1">
+<h1>Drawbacks</h1>
+<ul>
+<li>still in-dev</li>
+<li>does not support ES6+ (will be 0.5.0)</li>
+<li>a bit slow (5x JSHint)</li>
+</ul>
+</div>
+<div id="jscs" class="slide section level1">
+<h1><a href="https://github.com/mdevils/node-jscs" title="JSCS">JSCS</a></h1>
+<ul>
+<li>JavaScript Code Style checker</li>
+<li>based on Esprima</li>
+</ul>
+</div>
+<div id="favorite-rules-2" class="slide section level1">
+<h1>Favorite rules</h1>
+</div>
+<div id="disallowimplicittypeconversion" class="slide section level1">
+<h1><code>disallowImplicitTypeConversion</code></h1>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a = !!someVar;
+<span class="kw">var</span> b = +someInt;
+<span class="kw">var</span> c = <span class="st">&#39;&#39;</span> + someStr;</code></pre>
+<p>Valid</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a = <span class="fu">Boolean</span>(someVar);
+<span class="kw">var</span> b = <span class="fu">Integer</span>(someInt);
+<span class="kw">var</span> c = <span class="fu">String</span>(someStr);</code></pre>
+</div>
+<div id="requirecurlybraces-requires-curly-braces-after-statements" class="slide section level1">
+<h1><code>requireCurlyBraces</code> Requires curly braces after statements</h1>
+<pre class="sourceCode json"><code class="sourceCode json">{
+<span class="dt">&quot;requireCurlyBraces&quot;</span>: [
+    <span class="st">&quot;if&quot;</span>,
+    <span class="st">&quot;else&quot;</span>,
+    <span class="st">&quot;for&quot;</span>,
+    <span class="st">&quot;while&quot;</span>,
+    <span class="st">&quot;do&quot;</span>,
+    <span class="st">&quot;try&quot;</span>,
+    <span class="st">&quot;catch&quot;</span>
+]
+}</code></pre>
+</div>
+<div id="requirespaceafterkeywords-disallowspaceafterkeywords" class="slide section level1">
+<h1><code>requireSpaceAfterKeywords</code>, <code>disallowSpaceAfterKeywords</code></h1>
+<pre class="sourceCode json"><code class="sourceCode json">{
+    <span class="dt">&quot;requireSpaceAfterKeywords&quot;</span>: [
+        <span class="st">&quot;if&quot;</span>,
+        <span class="st">&quot;else&quot;</span>,
+        <span class="st">&quot;for&quot;</span>,
+        <span class="st">&quot;while&quot;</span>,
+        <span class="st">&quot;do&quot;</span>,
+        <span class="st">&quot;switch&quot;</span>,
+        <span class="st">&quot;return&quot;</span>,
+        <span class="st">&quot;try&quot;</span>,
+        <span class="st">&quot;catch&quot;</span>,
+        <span class="st">&quot;case&quot;</span>
+    ],
+    <span class="dt">&quot;disallowSpaceAfterKeywords&quot;</span>: [
+        <span class="st">&quot;default&quot;</span>
+    ]
+}</code></pre>
+</div>
+<div id="all-code-style" class="slide section level1">
+<h1>All code style</h1>
+<ul>
+<li><code>validateLineBreaks</code></li>
+<li><code>validateQuoteMarks</code></li>
+<li><code>validateIndentation</code></li>
+<li><code>disallowMixedSpacesAndTabs</code></li>
+<li><code>disallowTrailingWhitespace</code></li>
+</ul>
+</div>
+<div id="integration-when-cli-is-not-enough" class="slide section level1">
+<h1>Integration (when CLI is not enough)</h1>
+</div>
+<div id="editors" class="slide section level1">
+<h1>Editors</h1>
+</div>
+<div id="sublime-text" class="slide section level1">
+<h1>Sublime Text</h1>
+<ul>
+<li><a href="http://sublimelinter.readthedocs.org" title="SublimeLinter">SublimeLinter</a></li>
+</ul>
+<div class="figure">
+<img src="sublimelinter.png" />
+</div>
+</div>
+<div id="and-all-other-editors" class="slide section level1">
+<h1>...and all other editors</h1>
+</div>
+<div id="ci" class="slide section level1">
+<h1>CI</h1>
+<ul>
+<li>before/after testing</li>
+<li>gulp, Grunt, ...</li>
+</ul>
+</div>
+<div id="computer-fix-my-code" class="slide section level1">
+<h1>Computer, fix my code</h1>
+</div>
+<div id="editorconfig" class="slide section level1">
+<h1>[EditorConfig]</h1>
+<ul>
+<li>simple format</li>
+<li>claims to become a standard</li>
+<li>file <code>.editorconfig</code> for project and plugins for almost all IDEs</li>
+</ul>
+<div class="figure">
+<img src="editorconfig.png" alt="&quot;Editor&quot;" /><p class="caption">&quot;Editor&quot;</p>
+</div>
+</div>
+<div id="favorite-options" class="slide section level1">
+<h1>Favorite options</h1>
+<pre><code>root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{md,jade}]
+trim_trailing_whitespace = false</code></pre>
+</div>
+<div id="javascript-formatters" class="slide section level1">
+<h1>JavaScript Formatters</h1>
+</div>
+<div id="js-beautifier" class="slide section level1">
+<h1>[JS Beautifier]</h1>
+<ul>
+<li>whitespaces and newlines</li>
+<li>based on tokens</li>
+<li>stable, in general</li>
+<li>not very configurable :(</li>
+</ul>
+</div>
+<div id="favorite-rules-3" class="slide section level1">
+<h1>Favorite rules</h1>
+<pre class="sourceCode json"><code class="sourceCode json">{    
+    <span class="dt">&quot;indent_size&quot;</span>: <span class="dv">4</span>,
+    <span class="dt">&quot;indent_char&quot;</span>: <span class="st">&quot; &quot;</span>,
+    <span class="dt">&quot;indent_level&quot;</span>: <span class="dv">0</span>,
+
+    <span class="dt">&quot;preserve_newlines&quot;</span>: <span class="dv">true</span>,
+    <span class="dt">&quot;max_preserve_newlines&quot;</span>: <span class="dv">2</span>,
+
+    <span class="dt">&quot;jslint_happy&quot;</span>: <span class="dv">false</span>,
+    <span class="dt">&quot;brace_style&quot;</span>: <span class="st">&quot;collapse&quot;</span>,
+
+    <span class="dt">&quot;keep_array_indentation&quot;</span>: <span class="dv">false</span>,
+    <span class="dt">&quot;keep_function_indentation&quot;</span>: <span class="dv">false</span>,
+
+    <span class="dt">&quot;space_before_conditional&quot;</span>: <span class="dv">true</span>,
+    <span class="dt">&quot;space_in_paren&quot;</span>: <span class="dv">false</span>,
+}</code></pre>
+</div>
+<div id="example" class="slide section level1">
+<h1>Example</h1>
+<p>Before</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a   = <span class="dv">33</span>;
+<span class="kw">var</span> obj = { <span class="dt">a </span>:  <span class="dv">33</span>,
+    <span class="dt">b</span>: <span class="st">&quot;bzzz&quot;</span>
+    };
+<span class="kw">if</span>(a&gt;<span class="dv">3</span>){<span class="ot">console</span>.<span class="fu">log</span>( a);}</code></pre>
+<p>After</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a = <span class="dv">33</span>;
+<span class="kw">var</span> obj = {
+    <span class="dt">a</span>: <span class="dv">33</span>,
+    <span class="dt">b</span>: <span class="st">&quot;bzzz&quot;</span>
+};
+<span class="kw">if</span> (a &gt; <span class="dv">3</span>) {
+    <span class="ot">console</span>.<span class="fu">log</span>(a);
+}</code></pre>
+</div>
+<div id="esformatter" class="slide section level1">
+<h1>ESFormatter</h1>
+<ul>
+<li>whitespaces and newlines (planning semicolons)</li>
+<li>based on Esprima</li>
+<li>seems configurable</li>
+<li>early and unstable :(</li>
+</ul>
+</div>
+<div id="rules" class="slide section level1">
+<h1>Rules</h1>
+<pre class="sourceCode json"><code class="sourceCode json">{
+    <span class="dt">&quot;lineBreak&quot;</span>: {
+        <span class="dt">&quot;before&quot;</span>: {
+            <span class="dt">&quot;AssignmentExpression&quot;</span>: <span class="dv">1</span>,
+            <span class="dt">&quot;BlockStatement&quot;</span>: <span class="dv">0</span>
+            <span class="er">//</span> <span class="er">....</span>
+        },
+        <span class="dt">&quot;after&quot;</span>: {
+            <span class="dt">&quot;AssignmentExpression&quot;</span>: <span class="dv">1</span>,
+            <span class="dt">&quot;BlockStatement&quot;</span>: <span class="dv">1</span>
+            <span class="er">//</span> <span class="er">....</span>
+        }
+    },
+    <span class="dt">&quot;whitespace&quot;</span>: {
+        <span class="dt">&quot;before&quot;</span>: {
+            <span class="dt">&quot;ArrayExpressionOpening&quot;</span>: <span class="dv">0</span>,
+            <span class="dt">&quot;ArrayExpressionClosing&quot;</span>: <span class="dv">0</span>,
+            <span class="er">//</span> <span class="er">...</span>
+        },
+        <span class="dt">&quot;after&quot;</span>: {
+            <span class="dt">&quot;ArrayExpressionOpening&quot;</span>: <span class="dv">2</span>,
+            <span class="dt">&quot;ArrayExpressionClosing&quot;</span>: <span class="dv">0</span>,
+            <span class="er">//</span> <span class="er">...</span>
+        }
+    }
+}</code></pre>
+</div>
+<div id="example-1" class="slide section level1">
+<h1>Example</h1>
+<p>Before</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">Q
+    .<span class="fu">when</span>(<span class="fu">doSomething</span>())
+    .<span class="fu">then</span>(<span class="kw">function</span>() {
+        <span class="kw">return</span> <span class="dv">333</span>;
+    });</code></pre>
+<p>After</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">Q
+    .<span class="fu">when</span>(<span class="fu">doSomething</span>())
+    .<span class="fu">then</span>(<span class="kw">function</span>() {
+    <span class="kw">return</span> <span class="dv">333</span>;
+});</code></pre>
+</div>
+<div id="integration" class="slide section level1">
+<h1>Integration</h1>
+</div>
+<div id="integration-1" class="slide section level1">
+<h1>Integration</h1>
+<ul>
+<li>same as linting</li>
+<li>but better diff than replace</li>
+</ul>
+</div>
+<div id="plan-to-follow" class="slide section level1">
+<h1>Plan to follow</h1>
+</div>
+<div id="install-editorconfig" class="slide section level1">
+<h1>1. Install [EditorConfig]</h1>
+</div>
+<div id="install-your-favorite-linters-and-add-them-to-your-favorite-editor" class="slide section level1">
+<h1>2. Install your favorite linters and add them to your favorite editor</h1>
+</div>
+<div id="try-to-lint-your-existing-code" class="slide section level1">
+<h1>3. Try to lint your existing code</h1>
+</div>
+<div id="play-with-settings" class="slide section level1">
+<h1>4. Play with settings</h1>
+</div>
+<div id="try-to-install-and-configure-formatters" class="slide section level1">
+<h1>5. Try to install and configure formatters</h1>
+</div>
+<div class="slide section level1">
+
+<pre><code>$ npm install -g generator-linters</code></pre>
+</div>
+<div id="thank-you" class="slide section level1">
+<h1>Thank you!</h1>
+</div>
+</body>
+</html>
