@@ -1,18 +1,18 @@
-<!-- background: #184bc6 -->
-<!-- color: #fff -->
 
-***
 # JavaScript Linters
 
 ***
+
+# Linting
 
 Syntax validation to eliminate suspicious code and violations of code style.
 
 ***
 
-![crock](crock.png)
+![](crock.png)
 
 ***
+
 # Suspicious code (bugs potentially)
 
 Undefined variables
@@ -57,27 +57,37 @@ function goodFunc(b, c) {
 ```
 
 ***
+
 # [JSLint]
 
+- http://jslint.com
 - &copy; Douglas Crockford, 2002
 - enforcing "The Good Parts"
 
+![](jslint.png)
+
 ****
+
 # [JSHint]
 
+- http://jshint.org
 - &copy; Anton Kovalyov, 2010
 - more configurable, less strict by default
 
+![](jshint.png)
+
 ****
+
 # How to use 
 
 - CLI application `jshint file.js`
 - config file `.jshintrc`, JSON with comments
 
 ***
+
 # .jshintrc
 
-- rules
+- rules (boolean or string)
 - environments (browser, node, etc.)
 - globals
 
@@ -85,6 +95,7 @@ function goodFunc(b, c) {
 {
     "bitwise"       : true,
     "camelcase"     : true, 
+    "quotmark"      : "single",
 
     "node": true,
 
@@ -96,20 +107,23 @@ function goodFunc(b, c) {
 ```
 
 ***
+
 # Configuration per file
 
 ```javascript
 /*globals foo: false, baz: false */
 /*jshint camelcase: false */
 
-// ....
+var bar = 444;
 
 /* jshint ignore:start */
-// ...
+foo = 777;
+var FooBar = 888;
 /* jshint ignore:end */
 ```
 
 ***
+
 # Output
 
 - list of errors 
@@ -138,7 +152,7 @@ example1.js: line 1, col 8, 'foo' is defined but never used.
 # Favorite rules
 ****
 
-## `undef` Require all non-global variables to be declared (prevents global leaks)
+### `undef` Require all non-global variables to be declared (prevents global leaks)
 
 Not valid
 ```javascript
@@ -157,7 +171,8 @@ function good() {
 
 ****
 
-## `unused` Require all defined variables be used
+### `unused` Require all defined variables be used
+
 Not valid
 ```javascript
 function bad(baz) {
@@ -173,8 +188,11 @@ function good() {
     return foo;
 }
 ```
+
 ***
-## `asi` Require semicolons
+
+### `asi` Require semicolons
+
 Not valid
 ```javascript
 function bad(baz) {
@@ -191,7 +209,10 @@ function good() {
 }
 ```
 ***
-# `curly` Require {} for every new block or scope
+
+### `curly` Require {} for every new block or scope
+
+Not valid
 ```javascript
 function bad(baz) {
     if (baz > 5)
@@ -209,8 +230,12 @@ function good() {
     return 10;
 }
 ```
+
 ***
-## `newcap` Require capitalization of all constructor functions, `camelcase` Identifiers must be in camelCase
+
+### `newcap` Require capitalization of all constructor functions 
+### `camelcase` Identifiers must be in camelCase
+
 Not valid
 ```javascript
 var my_bar = new bar();
@@ -220,8 +245,12 @@ Valid
 ```javascript
 var myBar = new Bar();
 ```
+
 ****
-# `indent` Spaces to indent, `quotmark` Quotation mark
+
+### `indent` Spaces to indent 
+### `quotmark` Quotation mark
+
 Not valid
 ```javascript
 function bad(){
@@ -237,56 +266,53 @@ function bad(){
 ```
 
 ***
-# Below the trunk
+
+# Under the trunk
 
 - tokenize JavaScript
 
 ***
+
 # JSHint 3.0
+
 - more modular 
 - user rules
 - get rid of code style checking
 
 ***
+
 # Enter [Esprima]
 
 ***
+
 # [ESLint]
 
+- http://eslint.org
 - working with AST 
 - more sofisticated and complex rules
-- more robust alarm levels
+- more robust alert levels (ignore, warning or error)
 - 99% rules of [JSHint]
 - each rule in separate file
 - environments with globals and rules
 - user can write own rules
-- user can set notification level of rule -- ignore, warning or erro
+
+![](eslint.png)
 
 ***
+
 # Same configuration as [JSHint]
 
 - `.eslintrc` (JSON or YAML)
 - `/*eslint ... */` 
 
 ***
+
 # Favorite rules
 
 ****
-# `func-style` Enforce function style
-```
-"func-style": [2, "expression"]
-```
-Not valid
-```javascript
-function foo(){};
-```
 
-Valid
-```javascript
-var foo = function(){};
-```
-***
-# `no-dupe-keys` Disallow duplicate keys
+### `no-dupe-keys` Disallow duplicate keys
+
 Not valid
 ```javascript
 var foo = {
@@ -302,7 +328,8 @@ var foo = {
 };
 ```
 ****
-# `block-scoped-vars` Threat var as block scoped
+
+### `block-scoped-vars` Threat var as block scoped
 
 Not valid
 ```javascript
@@ -310,7 +337,6 @@ function doSomething(a) {
     if (a) {
         var build = true;
     }
-
     console.log(build);
 }
 ```
@@ -322,12 +348,13 @@ function doSomething(a) {
     if (a) {
         build = true;
     }
-
     console.log(build);
 }
 ```
+
 ****
-# `consistent-this` Require consistent `this`
+
+### `consistent-this` Require consistent `this`
 ```
 "consistent-this": [2, "self"]
 ```
@@ -341,8 +368,28 @@ Valid
 ```javascript
 var self = this;
 ```
+
 ****
-# `radix` require radix for `parseInt`
+
+### `func-style` Enforce function style
+
+```
+"func-style": [2, "expression"]
+```
+
+Not valid
+```javascript
+function foo(){};
+```
+
+Valid
+```javascript
+var foo = function(){};
+```
+
+***
+
+### `radix` require radix for `parseInt`
 
 Not valid
 ```javascript
@@ -354,30 +401,38 @@ Valid
 var a = parseInt("055", 10);
 ```
 ****
-# `semi` can enforce absent of semi
+
+### `semi` can enforce absent of semi
+
 ```
 semi: [2, "never"]
 ```
 
 ****
+
 # Drawbacks
 
 - still in-dev
 - does not support ES6+ (will be 0.5.0)
-- a bit slow (5x JSHint)
+- a bit slow (5x [JSHint])
 
 ****
 
 # [JSCS]
 
+- https://github.com/mdevils/node-jscs 
 - JavaScript Code Style checker
 - based on Esprima
 
 ****
+
 # Favorite rules
 
 ****
-# `disallowImplicitTypeConversion`
+
+### `disallowImplicitTypeConversion`
+
+Not valid
 ```javascript
 var a = !!someVar;
 var b = +someInt;
@@ -390,24 +445,28 @@ var a = Boolean(someVar);
 var b = Integer(someInt);
 var c = String(someStr);
 ```
+
 ****
-# `requireCurlyBraces` Requires curly braces after statements
+
+### `requireCurlyBraces` Requires curly braces after statements
 
 ```json 
 {
-"requireCurlyBraces": [
-    "if",
-    "else",
-    "for",
-    "while",
-    "do",
-    "try",
-    "catch"
-]
+    "requireCurlyBraces": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "try",
+        "catch"
+    ]
 }
 ```
+
 ****
-# `requireSpaceAfterKeywords`, `disallowSpaceAfterKeywords`
+
+### `requireSpaceAfterKeywords`, `disallowSpaceAfterKeywords`
 
 ```json
 {
@@ -428,6 +487,9 @@ var c = String(someStr);
     ]
 }
 ```
+
+***
+
 # All code style
 
 - `validateLineBreaks` 
@@ -446,9 +508,7 @@ var c = String(someStr);
 
 ****
 
-# Sublime Text
-
-- [SublimeLinter]
+# SublimeLinter
 
 ![](sublimelinter.png)
 
@@ -461,27 +521,30 @@ var c = String(someStr);
 # CI
 
 - before/after testing
-- gulp, Grunt, ...
+- gulp, Grunt, etc.
 
 ****
 
 # Computer, fix my code
 
+![](fixit.jpg)
+
 ****
 
 # [EditorConfig]
 
+- http://editorconfig.org
 - simple format
 - claims to become a standard
 - file `.editorconfig` for project and plugins for almost all IDEs
 
-!["Editor"](editorconfig.png)
+![](editorconfig.png)
 
 ****
 
 # Favorite options
 
-```
+```ini
 root = true
 
 [*]
@@ -504,6 +567,7 @@ trim_trailing_whitespace = false
 
 # [JS Beautifier]
 
+- http://jsbeautifier.org
 - whitespaces and newlines
 - based on tokens
 - stable, in general
@@ -527,7 +591,6 @@ trim_trailing_whitespace = false
 
     "keep_array_indentation": false,
     "keep_function_indentation": false,
-
     "space_before_conditional": true,
     "space_in_paren": false,
 }
@@ -558,8 +621,9 @@ if (a > 3) {
 
 ****
 
-# ESFormatter
+# [ESFormatter]
 
+- https://github.com/millermedeiros/esformatter
 - whitespaces and newlines (planning semicolons)
 - based on Esprima
 - seems configurable
@@ -623,10 +687,6 @@ Q
 
 # Integration
 
-****
-
-# Integration
-
 - same as linting
 - but better diff than replace
 
@@ -634,27 +694,15 @@ Q
 
 # Plan to follow
 
-****
-
-# 1. Install [EditorConfig]
-
-****
-
-# 2. Install your favorite linters and add them to your favorite editor
+1. Install [EditorConfig]
+2. Install your favorite linters and add them to your favorite editor
+3. Try to lint your existing code
+4. Play with settings
+5. Try to install and configure formatters
 
 ****
 
-# 3. Try to lint your existing code
-
-****
-
-# 4. Play with settings
-
-****
-
-# 5. Try to install and configure formatters
-
-****
+# Quick way
 
 ```
 $ npm install -g generator-linters
@@ -669,3 +717,6 @@ $ npm install -g generator-linters
 [Esprima]: http://esprima.org/  "Esprima"
 [JSCS]: https://github.com/mdevils/node-jscs  "JSCS"
 [SublimeLinter]: http://sublimelinter.readthedocs.org "SublimeLinter"
+[JS Beautifier]: http://jsbeautifier.org
+[ESFormatter]: https://github.com/millermedeiros/esformatter
+[EditorConfig]: http://editorconfig.org
